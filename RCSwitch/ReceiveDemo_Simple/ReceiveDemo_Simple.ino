@@ -1,0 +1,39 @@
+/*
+  Simple example for receiving
+  
+  http://code.google.com/p/rc-switch/
+*/
+
+#include <RCSwitch.h>
+
+RCSwitch mySwitch = RCSwitch();
+const int led_pin = 13;
+
+void setup() {
+  Serial.begin(9600);
+  mySwitch.enableReceive(0);  // Receiver on inerrupt 0 => that is pin #2
+  pinMode(led_pin, OUTPUT);
+}
+
+void loop() {
+  if (mySwitch.available()) {
+    digitalWrite(led_pin, HIGH);
+    
+    int value = mySwitch.getReceivedValue();
+    
+    if (value == 0) {
+      Serial.print("Unknown encoding");
+    } else {
+      Serial.print("Received ");
+      Serial.print( mySwitch.getReceivedValue() );
+      Serial.print(" / ");
+      Serial.print( mySwitch.getReceivedBitlength() );
+      Serial.print("bit ");
+      Serial.print("Protocol: ");
+      Serial.println( mySwitch.getReceivedProtocol() );
+    }
+
+    mySwitch.resetAvailable();
+    digitalWrite(led_pin, LOW);
+  }
+}
