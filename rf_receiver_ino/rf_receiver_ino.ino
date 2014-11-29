@@ -16,6 +16,7 @@ void setup() {
     vw_rx_start();
     pinMode(led_rec_pin, OUTPUT);
     pinMode(relay_amp_pin, OUTPUT);
+    
 }
 
 void loop() {
