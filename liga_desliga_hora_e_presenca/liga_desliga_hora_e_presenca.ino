@@ -17,7 +17,7 @@ void setup () {
   Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
 #endif
   rtc.begin();
-  //rtc.adjust(DateTime(2014, 12, 12, 22, 0, 0));
+  //rtc.adjust(DateTime(2014, 14, 12, 17, 18, 0));
   if (!rtc.isrunning()) {
     Serial.println("RTC is NOT running!");
   }
@@ -25,28 +25,20 @@ void setup () {
 
 void loop () {
     DateTime now = rtc.now();
-    
-    Serial.print(now.year(), DEC);
-    Serial.print('/');
-    Serial.print(now.month(), DEC);
-    Serial.print('/');1
-    Serial.print(now.day(), DEC);
-    Serial.print(' ');
-    Serial.print(now.hour());
-    Serial.print(':');
-    Serial.print(now.minute(), DEC);
-    Serial.print(':');
-    Serial.print(now.second(), DEC);
-    Serial.println();
-    
+    Serial.println(now.hour());
     if(now.hour() >= 19 && now.hour() <=23){
-      digitalWrite(relay_pin, HIGH);
-      delay(60000);
+       int pirVal = digitalRead(mov_sensor_pin);
+        if(pirVal == HIGH){
+          digitalWrite(relay_pin, HIGH);
+          delay(1800000);
+        }else{
+          digitalWrite(relay_pin, LOW);
+        }
     }else{
       int pirVal = digitalRead(mov_sensor_pin);
       if(pirVal == HIGH){
         digitalWrite(relay_pin, HIGH);
-        delay(60000);
+        delay(600000);
       }else{
         digitalWrite(relay_pin, LOW);
       }
