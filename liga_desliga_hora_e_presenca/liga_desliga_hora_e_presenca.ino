@@ -14,7 +14,7 @@ void setup () {
 #ifdef AVR
   Wire.begin();
 #else
-  Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
+  Wire1.begin();
 #endif
   rtc.begin();
   //rtc.adjust(DateTime(2014, 14, 12, 17, 18, 0));
@@ -26,8 +26,10 @@ void setup () {
 void loop () {
     DateTime now = rtc.now();
     Serial.println(now.hour());
-    if(now.hour() >= 19 && now.hour() <=23){
-       int pirVal = digitalRead(mov_sensor_pin);
+    
+    if(now.hour() >= 19 && now.hour() <= 23){
+        int pirVal = digitalRead(mov_sensor_pin);
+        
         if(pirVal == HIGH){
           digitalWrite(relay_pin, HIGH);
           delay(1800000);
@@ -36,6 +38,7 @@ void loop () {
         }
     }else{
       int pirVal = digitalRead(mov_sensor_pin);
+      
       if(pirVal == HIGH){
         digitalWrite(relay_pin, HIGH);
         delay(600000);
