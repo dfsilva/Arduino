@@ -6,7 +6,7 @@ const int receive_pin = 11;
 const int transmit_en_pin = 3;
 const int relay_amp_pin = 10;
 
-char received[100];
+char received[80];
 
 void setup() {
     Serial.begin(9600);
@@ -21,8 +21,9 @@ void setup() {
 
 void loop() {
     
-    uint8_t buf[VW_MAX_MESSAGE_LEN];
-    uint8_t buflen = VW_MAX_MESSAGE_LEN;
+    uint8_t buflen = 100;
+    uint8_t buf[buflen];
+    
     
     if (vw_get_message(buf, &buflen))
     {
@@ -35,8 +36,8 @@ void loop() {
         digitalWrite(led_rec_pin, LOW);
     }
     
-    digitalWrite(relay_amp_pin, HIGH);
-    delay(5000);
-    digitalWrite(relay_amp_pin, LOW);
-    delay(5000);
+    //digitalWrite(relay_amp_pin, HIGH);
+    //delay(5000);
+    //digitalWrite(relay_amp_pin, LOW);
+   // delay(5000);
 }
