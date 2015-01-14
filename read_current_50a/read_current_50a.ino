@@ -9,7 +9,7 @@ Version:0.2
 */
 
 
-const int numReadings = 30;
+const int numReadings = 100;
 float readings[numReadings];      // the readings from the analog input
 int index = 0;                  // the index of the current reading
 float total = 0;                  // the running total
@@ -27,7 +27,7 @@ void loop()
 {   
     total= total - readings[index];          
     readings[index] = analogRead(0); //Raw data reading
-    readings[index] = (readings[index]-510)*5/1024/0.04-0.04;//Data processing:510-raw data from analogRead when the input is 0; 5-5v; the first 0.04-0.04V/A(sensitivity); the second 0.04-offset val;
+    readings[index] = (readings[index]-507)*5/1024/0.04-0.04;//Data processing:510-raw data from analogRead when the input is 0; 5-5v; the first 0.04-0.04V/A(sensitivity); the second 0.04-offset val;
     total= total + readings[index];       
     index = index + 1;                    
     if (index >= numReadings)              
@@ -35,7 +35,7 @@ void loop()
     average = total/numReadings;   //Smoothing algorithm (http://www.arduino.cc/en/Tutorial/Smoothing)    
     currentValue= average;
     Serial.println(currentValue);
-    delay(30);
+    delay(1);
 }
 
 
