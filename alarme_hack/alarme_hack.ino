@@ -4,13 +4,24 @@ const int alarmActivePort = 3;
 int alarmState = 0; 
 int alarmActiveState = 0; 
 
+const int disparaAlarmePort = 13;
+const int sensorShockPort = 4;
+
+const int rfPin = 1;
+
 
 void setup() {
   Serial.begin(9600);
-  pinMode(alarmActivePort, INPUT);     
+  pinMode(alarmActivePort, INPUT);
+
+  pinMode(disparaAlarmePort, OUTPUT);   
+  pinMode(sensorShockPort, INPUT);  
+  
+  digitalWrite(disparaAlarmePort, HIGH);
 }
 
 void loop(){
+ /*
   alarmState = analogRead(alarmPin);
   int disparado = digitalRead(alarmActivePort);
   
@@ -30,4 +41,26 @@ void loop(){
   if(alarmActiveState == HIGH){
     Serial.println("DISPARADO");
   }
+  
+  */
+  
+
+/*
+  int sensorChoque = digitalRead(sensorShockPort);
+  Serial.println(sensorChoque);
+  delay(500);
+  */
+  int rfState = analogRead(rfPin);
+  Serial.println(rfState);
+  delay(10);
+ 
+  
+  /*
+  digitalWrite(disparaAlarmePort, HIGH);
+  delay(10000);
+  digitalWrite(disparaAlarmePort, LOW);
+  delay(1000);
+  */
+  
+  
 }
