@@ -80,7 +80,7 @@ void loop(void)
       if (millis() - started_waiting_at > 200 )
         timeout = true;
     if ( timeout ){
-      printf("Falha na respostat.\n\r");
+      printf("Falha na resposta.\n\r");
     }else{
       unsigned long got_time;
       radio.read(&got_time, sizeof(unsigned long) );
@@ -92,7 +92,6 @@ void loop(void)
   if ( role == role_pong_back ){
     // if there is data ready
     if ( radio.available()){
-      // Dump the payloads until we've gotten everything
       unsigned long got_time;
       bool done = false;
       while (!done){
