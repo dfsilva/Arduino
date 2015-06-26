@@ -11,8 +11,7 @@ DHT dht(DHTPIN, DHTTYPE);
 RF24 radio(9,10);
 
 //Topology
-const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
-
+const uint64_t pipe_central =  0xF0F0F0F0E1LL;
 
 void setup(){
     Serial.begin(57600);
@@ -27,10 +26,7 @@ void setup(){
     radio.setRetries(15,15);
     radio.setCRCLength(RF24_CRC_16);
 
-    radio.openWritingPipe(pipes[0]);
-    radio.openReadingPipe(1,pipes[1]);  
-
-    radio.startListening();
+    radio.openWritingPipe(pipe_central);
 }
 
 void loop(){
@@ -41,7 +37,7 @@ void loop(){
 }
 
 void transmitTemperature(){
-    radio.stopListening();
+    //radio.stopListening();
     float t = dht.readTemperature();
     char temp[10];
     dtostrf(t,6,2,temp);

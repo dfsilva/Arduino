@@ -10,8 +10,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 RF24 radio(9,10);
 
-//Topology
-const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
+const uint64_t pipe_spot1 = 0xF0F0F0F0E1LL;
 
 void setup(){
     Serial.begin(57600);
@@ -26,9 +25,7 @@ void setup(){
     radio.setRetries(15,15);
     radio.setCRCLength(RF24_CRC_16);
 
-    //radio.openWritingPipe(pipes[0]);
-    radio.openReadingPipe(1,pipes[0]);  
-
+    radio.openReadingPipe(1,pipe_spot1);  
     radio.startListening();
 }
 
