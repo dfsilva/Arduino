@@ -19,13 +19,13 @@ void setup(){
     dht.begin();
     radio.begin();
 
-    //radio.setDataRate(RF24_250KBPS);
-    //radio.setPALevel(RF24_PA_MAX);
-    //radio.setChannel(70);
+    radio.setDataRate(RF24_250KBPS);
+    radio.setPALevel(RF24_PA_MAX);
+    radio.setChannel(70);
 
-    //radio.enableDynamicPayloads();
+    radio.enableDynamicPayloads();
     radio.setRetries(15,15);
-    //radio.setCRCLength(RF24_CRC_16);
+    radio.setCRCLength(RF24_CRC_16);
 
     radio.openWritingPipe(pipes[0]);
     radio.openReadingPipe(1,pipes[1]);  
