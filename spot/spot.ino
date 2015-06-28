@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include "DHT.h"
 #include "nRF24L01.h"
+#include "EmonLib.h"  
 #include "RF24.h"
 #include "printf.h"
 
@@ -13,10 +14,14 @@ RF24 radio(9,10);
 //Topology
 const uint64_t pipe_central =  0xF0F0F0F0E1LL;
 
+EnergyMonitor emon1;
+
 void setup(){
     Serial.begin(57600);
     dht.begin();
     radio.begin();
+
+    emon1.current(1, 111.1);
 
     radio.setDataRate(RF24_250KBPS);
     radio.setPALevel(RF24_PA_MAX);
@@ -31,19 +36,17 @@ void setup(){
 
 void loop(){
     transmitTemperature();
-    delay(500);
     transmitHumidity();
-    delay(500);
+    transmitEnergy();
+    //delay(500);
 }
 
 void transmitTemperature(){
-    //radio.stopListening();
     float t = dht.readTemperature();
     char temp[10];
     dtostrf(t,6,2,temp);
     char msg[40];
     sprintf(msg, "id:%d,T:temp,value:%s",1,temp);
-
     Serial.println(msg); 
     bool ok = radio.write(&msg,strlen(msg));
 }
@@ -54,11 +57,14 @@ void transmitHumidity(){
     dtostrf(h,6,2,temp);
     char msg[40];
     sprintf(msg, "id:%d,T:hum,value:%s",1,temp);
-    //free(temp);
     Serial.println(msg); 
     bool ok = radio.write(&msg,strlen(msg));
-    //vw_send((uint8_t *)msg, strlen(msg));
-    //vw_wait_tx(); 
-   // free(msg);
-    
 }
+
+void transmitEnergy(){
+  double Irms = emon1.calcIrms(1480);
+  Serial.print(Irms*230.0);
+  Serial.print(" ");
+  Serial.println(Irms);  
+}
+
