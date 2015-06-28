@@ -16,6 +16,8 @@ const uint64_t pipe_central =  0xF0F0F0F0E1LL;
 
 EnergyMonitor emon1;
 
+const int PIR_PIN = 5;
+
 void setup(){
     Serial.begin(57600);
     dht.begin();
@@ -32,13 +34,16 @@ void setup(){
     radio.setCRCLength(RF24_CRC_16);
 
     radio.openWritingPipe(pipe_central);
+
+    pinMode(PIR_PIN, INPUT);
 }
 
 void loop(){
     transmitTemperature();
     transmitHumidity();
     transmitEnergy();
-    //delay(500);
+    transmitPresence();
+    delay(500);
 }
 
 void transmitTemperature(){
@@ -62,9 +67,26 @@ void transmitHumidity(){
 }
 
 void transmitEnergy(){
-  double Irms = emon1.calcIrms(1480);
-  Serial.print(Irms*230.0);
-  Serial.print(" ");
-  Serial.println(Irms);  
+  double irms = emon1.calcIrms(1480);
+  char msg[40];
+  char ampTemp[6];
+  dtostrf(irms, 4, 2, ampTemp);
+  sprintf(msg, "id:%d,T:amp,value:%s",1,ampTemp);
+  
+  Serial.println(msg); 
+  bool ok = radio.write(&msg,strlen(msg));
+  Serial.println(irms);
+  
+  //Serial.print(irms*230.0);
+  //Serial.print(" ");
+  //  
+}
+
+void transmitPresence(){
+  int pirVal = digitalRead(PIR_PIN);
+  char msg[40];
+  sprintf(msg, "id:%d,T:pre,value:%d",1,pirVal);
+  Serial.println(msg); 
+  bool ok = radio.write(&msg,strlen(msg));
 }
 
