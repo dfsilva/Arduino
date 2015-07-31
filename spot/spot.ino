@@ -17,13 +17,16 @@ const uint64_t pipe_central =  0xF0F0F0F0E1LL;
 EnergyMonitor emon1;
 
 const int PIR_PIN = 5;
+const int DOOR_PIN = 0;
+
+unsigned long lastDoorChange = 0;
 
 void setup(){
     Serial.begin(57600);
     dht.begin();
     radio.begin();
 
-    emon1.current(1, 111.1);
+    emon1.current(1, 5.4);
 
     radio.setDataRate(RF24_250KBPS);
     radio.setPALevel(RF24_PA_MAX);
@@ -36,6 +39,7 @@ void setup(){
     radio.openWritingPipe(pipe_central);
 
     pinMode(PIR_PIN, INPUT);
+    attachInterrupt(DOOR_PIN, portaAberta, CHANGE); 
 }
 
 void loop(){
@@ -89,4 +93,21 @@ void transmitPresence(){
   Serial.println(msg); 
   bool ok = radio.write(&msg,strlen(msg));
 }
+
+void portaAberta(){
+  long now = millis();
+
+  if((now - lastDoorChange) > 2000){
+
+    char msg[40];
+    sprintf(msg, "id:%d,T:pre,value:%d",3,1);
+    Serial.println(msg); 
+    bool ok = radio.write(&msg,strlen(msg));
+    
+    lastDoorChange = millis();
+  }
+}
+
+
+
 
