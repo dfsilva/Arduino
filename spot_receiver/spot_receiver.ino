@@ -39,7 +39,7 @@ void loop(){
       while ( !done ) {
         len = radio.getDynamicPayloadSize();
         done = radio.read(&msg,len);
-        delay(5);
+        //delay(5);
       }
     Serial.println(msg);  
    } 
