@@ -51,14 +51,21 @@ void setup(){
 
 void loop(){
     transmitTemperature();
-    //transmitHumidity();
-    //transmitEnergy1();
-    //transmitEnergy2();
-    //transmitEnergy3();
-    //transmitPresence();
-    //transmitirPorta();
-    //transmitirFumaca();
-    delay(500);
+    
+    transmitHumidity();
+    
+    transmitEnergy1();
+    
+    transmitEnergy2();
+   
+    transmitEnergy3();
+    
+    transmitPresence();
+    
+    transmitirPorta();
+    
+    transmitirFumaca();
+    delay(100);
 }
 
 void transmitTemperature(){
