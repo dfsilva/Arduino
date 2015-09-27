@@ -6,7 +6,7 @@
 RF24 radio(9,10);
 
 
-const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
+const uint64_t pipes[2] = { 0xABCDABCD71LL, 0xABCDABCD72LL };
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 
@@ -51,7 +51,7 @@ void loop(void)
     unsigned long started_waiting_at = millis();
     bool timeout = false;
     while ( ! radio.available() && ! timeout )
-      if (millis() - started_waiting_at > 200 )
+      if (millis() - started_waiting_at > 20000 )
         timeout = true;
     if ( timeout ){
       printf("Timeout na resposta.\n\r");
@@ -76,7 +76,7 @@ void loop(void)
 	      delay(20);
       }
 
-      printf("Recebido %s...",&msg);
+      printf("Recebido %s...\n\r",&msg);
       radio.stopListening();
 
       char recebido[40] = "recebido";
@@ -84,7 +84,7 @@ void loop(void)
       if(okResposta)
         printf("Resposta enviada.\n\r");
       else
-        printf("Erro ao enviar resposta");
+        printf("Erro ao enviar resposta\n\r");
       radio.startListening();
     }
   }
