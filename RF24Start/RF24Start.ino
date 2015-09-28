@@ -5,9 +5,10 @@
 
 RF24 radio(9,10);
 
-
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0xABCDABCD72LL };
+
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
+
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 
 role_e role = role_pong_back;
@@ -21,6 +22,9 @@ void setup(void)
   printf("ROLE: %s\n\r",role_friendly_name[role]);
   printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
   radio.begin();
+
+  radio.enableDynamicPayloads();
+  
   radio.setRetries(15,15);
 
   radio.openWritingPipe(pipes[0]);
@@ -30,8 +34,7 @@ void setup(void)
   radio.printDetails();
 }
 
-void loop(void)
-{
+void loop(void){
   if (role == role_ping_out){
     radio.stopListening();
     
@@ -39,7 +42,7 @@ void loop(void)
     unsigned long time = millis();
     printf("Enviando agora %s...",msg);
     
-    bool ok = radio.write(&msg, strlen(msg) );
+    bool ok = radio.write(&msg, strlen(msg));
     
     if (ok)
       printf("Ok, enviado");
@@ -67,16 +70,11 @@ void loop(void)
  
     if ( radio.available()){
       char msg[40] = "";
-      int len = 0;
-      bool done = false;
+      int len = radio.getDynamicPayloadSize();
+      radio.read( &msg, len ); 
       
-      while (!done){
-        len = radio.getDynamicPayloadSize();
-        done = radio.read( &msg, len ); 
-	      delay(20);
-      }
-
       printf("Recebido %s...\n\r",&msg);
+      
       radio.stopListening();
 
       char recebido[40] = "recebido";
