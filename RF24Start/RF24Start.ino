@@ -59,7 +59,7 @@ void loop(void){
     unsigned long started_waiting_at = millis();
     bool timeout = false;
     while ( ! radio.available() && ! timeout )
-      if (millis() - started_waiting_at > 10000 )
+      if (millis() - started_waiting_at > 50 )
         timeout = true;
     if ( timeout ){
       printf("Timeout na resposta.\n\r");
@@ -82,8 +82,7 @@ void loop(void){
       
       radio.stopListening();
 
-      char recebido[40] = "recebido";
-      bool okResposta = radio.write(&recebido, strlen(recebido) );
+      bool okResposta = radio.write(&msg, strlen(msg));
       if(okResposta)
         printf("Resposta enviada.\n\r");
       else
