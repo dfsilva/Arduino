@@ -11,25 +11,27 @@ DHT dht(DHTPIN, DHTTYPE);
 RF24 radio(9,10);
 
 //Topology
-const uint64_t pipe_central =  0xF0F0F0F0E1LL;
+const uint64_t pipe_central =  0xABCDABCD71LL;
 
 const int PIR_PIN = 5;
 const int GAS_PIN = A2;
 
 void setup(){
     Serial.begin(57600);
+    printf_begin();
     dht.begin();
     radio.begin();
-
-    radio.setDataRate(RF24_250KBPS);
-    radio.setPALevel(RF24_PA_MAX);
-    radio.setChannel(70);
-
     radio.enableDynamicPayloads();
+
+    //radio.setDataRate(RF24_250KBPS);
+    //radio.setPALevel(RF24_PA_MAX);
+    radio.setChannel(55);
+
     radio.setRetries(15,15);
-    radio.setCRCLength(RF24_CRC_16);
+    //radio.setCRCLength(RF24_CRC_16);
 
     radio.openWritingPipe(pipe_central);
+    radio.printDetails();
 
     pinMode(PIR_PIN, INPUT);
     pinMode(GAS_PIN, INPUT);
@@ -40,8 +42,8 @@ void loop(){
     delay(100);
     transmitHumidity();
     delay(100);
-    //transmitPresence();
-    //delay(100);
+    transmitPresence();
+    delay(100);
     transmitirFumaca();
     delay(100);
 }
@@ -81,9 +83,3 @@ void transmitirFumaca(){
     Serial.println(msg); 
     bool ok = radio.write(&msg,strlen(msg)); 
 }
-
-
-
-
-
-
