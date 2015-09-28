@@ -1,47 +1,36 @@
 #include <SPI.h>
-#include "DHT.h"
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
 
-#define DHTPIN A0
-#define DHTTYPE DHT11
-DHT dht(DHTPIN, DHTTYPE);
-
 RF24 radio(9,10);
 
-const uint64_t pipe_spot1 = 0xF0F0F0F0E1LL;
+const uint64_t pipe_spot1 = 0xABCDABCD71LL;
 
 void setup(){
     Serial.begin(57600);
-    dht.begin();
+    printf_begin();
     radio.begin();
-
-    radio.setDataRate(RF24_250KBPS);
-    radio.setPALevel(RF24_PA_MAX);
-    radio.setChannel(70);
-
     radio.enableDynamicPayloads();
+
+    //radio.setDataRate(RF24_250KBPS);
+   // radio.setPALevel(RF24_PA_MAX);
+    radio.setChannel(55);
+
     radio.setRetries(15,15);
     radio.setCRCLength(RF24_CRC_16);
 
     radio.openReadingPipe(1,pipe_spot1);  
     radio.startListening();
+    //radio.printDetails();
 }
 
 void loop(){
-    
-   int len = 0;
-   char msg[40] = "";
-   
    if (radio.available()) {
-      bool done = false;
-      while ( !done ) {
-        len = radio.getDynamicPayloadSize();
-        done = radio.read(&msg,len);
-        //delay(5);
-      }
-    Serial.println(msg);  
+        int len = radio.getDynamicPayloadSize();
+        char msg[40] = "";
+        bool done = radio.read(&msg,len);
+        Serial.println(msg);  
    } 
 }
 
