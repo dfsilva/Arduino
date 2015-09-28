@@ -13,6 +13,8 @@ const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 
 role_e role = role_pong_back;
 
+int valor = 0;
+
 void setup(void)
 {
 
@@ -38,14 +40,17 @@ void loop(void){
   if (role == role_ping_out){
     radio.stopListening();
     
-    char msg[40] = "tipo:temp,val:22";
+    char msg[40];
+
+    sprintf(msg, "id:%d,T:temp,value:%i",1,(valor++));
+    
     unsigned long time = millis();
-    printf("Enviando agora %s...",msg);
+    printf("Enviando agora %s\n\r",msg);
     
     bool ok = radio.write(&msg, strlen(msg));
     
     if (ok)
-      printf("Ok, enviado");
+      printf("Ok, enviado, vai aguardar resposta\n\r");
     else
       printf("Falhou envio.\n\r");
 
@@ -54,7 +59,7 @@ void loop(void){
     unsigned long started_waiting_at = millis();
     bool timeout = false;
     while ( ! radio.available() && ! timeout )
-      if (millis() - started_waiting_at > 20000 )
+      if (millis() - started_waiting_at > 10000 )
         timeout = true;
     if ( timeout ){
       printf("Timeout na resposta.\n\r");
