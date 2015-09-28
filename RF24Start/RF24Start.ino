@@ -5,7 +5,7 @@
 
 RF24 radio(9,10);
 
-const uint64_t pipes[2] = { 0xABCDABCD71LL, 0xABCDABCD72LL };
+const uint64_t pipes[2] = {0xABCDABCD72LL,0xABCDABCD71LL};
 
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
 
@@ -81,9 +81,9 @@ void loop(void){
       printf("Recebido %s...\n\r",&msg);
       
       radio.stopListening();
-
-      char recebido[40] = "recebido";
-      bool okResposta = radio.write(&recebido, strlen(recebido) );
+      
+      printf("Enviando resposta %s\n\r",msg);
+      bool okResposta = radio.write(&msg, strlen(msg));
       if(okResposta)
         printf("Resposta enviada.\n\r");
       else
