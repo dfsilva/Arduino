@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 #include "bluetooth.h"
 
-Bluetooth *blue = new Bluetooth("ExampleRobot");
+Bluetooth *blue = new Bluetooth("DiegoBluetooth");
 
 void setup() {
   Serial.begin(9600);
